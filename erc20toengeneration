@@ -1,0 +1,44 @@
+// SPDX-License-Identifier: MIT
+pragma solidity 0.8.26;
+
+contract SimpleToken {
+    string public name = "SimpleToken";
+    string public symbol = "ST";
+    uint public totalSupply = 1000000;
+
+    mapping(address => uint) public balances;
+
+    address private owner;
+
+    event Transfer(address indexed from, address indexed to, uint value);
+
+    constructor() {
+        owner = msg.sender;
+        balances[owner] = totalSupply;
+    }
+
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Only the owner can call this function");
+        _;
+    }
+
+    function mint(address to, uint amount) public onlyOwner {
+        balances[to] += amount;
+        totalSupply += amount;
+        emit Transfer(address(0), to, amount);
+    }
+
+    function transfer(address to, uint amount) public {
+        require(balances[msg.sender] >= amount, "Insufficient balance");
+        balances[msg.sender] -= amount;
+        balances[to] += amount;
+        emit Transfer(msg.sender, to, amount);
+    }
+
+    function burn(uint amount) public {
+        require(balances[msg.sender] >= amount, "Insufficient balance");
+        balances[msg.sender] -= amount;
+        totalSupply -= amount;
+        emit Transfer(msg.sender, address(0), amount);
+    }
+}
