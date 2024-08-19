@@ -19,7 +19,67 @@ transfer(address to, uint amount)
 Allows users to transfer tokens to another address.
 Requires the sender to have a sufficient balance.
 Emits a Transfer event with the transferred amount.
-burn(uint amount)
+burn(uint amount)# MyToken Smart Contract
+
+This repository contains the Solidity smart contract `MyToken.sol`, which implements a basic ERC20-like token with minting and burning functionality.
+
+## Contract Overview
+
+The `MyToken` contract allows users to create a token with specific details such as the token name, abbreviation, and total supply. It provides functionality for minting and burning tokens, with appropriate checks to ensure that tokens are only burned if the sender has sufficient balance.
+
+### Contract Details
+
+- **Token Name**: `Ether`
+- **Token Abbreviation**: `ETH`
+- **Total Supply**: Initialized to `0`
+
+### Features
+
+1. **Public Variables**:  
+   - `tokenName`: Stores the name of the token.
+   - `tokenAbbrv`: Stores the abbreviation of the token.
+   - `totalSupply`: Tracks the total supply of the token.
+
+2. **Balances Mapping**:  
+   A mapping of addresses to their respective token balances:
+   ```solidity
+   mapping (address => uint) public balances;
+   ```
+
+3. **Mint Function**:
+   - Takes an address and a value as parameters.
+   - Increases the total supply of tokens by the specified value.
+   - Increases the balance of the provided address by the same value.
+   - Example usage:
+     ```solidity
+     function mint(address _address, uint _value) public {
+         totalSupply += _value;
+         balances[_address] += _value;
+     }
+     ```
+
+4. **Burn Function**:
+   - Takes an address and a value as parameters.
+   - Reduces the total supply of tokens by the specified value if the address has enough balance.
+   - Reduces the balance of the provided address by the same value.
+   - The function includes a conditional check to ensure that the address has a balance greater than or equal to the value being burned.
+   - Example usage:
+     ```solidity
+     function burn(address _address, uint _value) public {
+         if (balances[_address] >= _value) {
+             totalSupply -= _value;
+             balances[_address] -= _value;
+         }
+     }
+     ```
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Disclaimer
+
+This contract is a simple educational example and is not intended for production use. Always audit and test smart contracts thoroughly before deploying them on the mainnet.
 Allows users to burn (destroy) tokens from their balance.
 Requires the sender to have a sufficient balance.
 Emits a Transfer event with the burned amount.
